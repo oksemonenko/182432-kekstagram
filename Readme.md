@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Оксана Семоненко](https://up.htmlacademy.ru/javascript/4/user/182432).
-* Наставник: `Неизвестно`.
+* Наставник: `Сергей Катревич`.
 
 ---
 
