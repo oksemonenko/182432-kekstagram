@@ -1,9 +1,9 @@
 function getMessage(a, b) {
-    if (typeof(a) === "boolean" && a == true) {
+    if (typeof(a) === "boolean" && a === true) {
 
         return ('Переданное GIF-изображение анимировано и содержит ' + b + ' кадров');
 
-    } else if (typeof(a) === "boolean" && a == false) {
+    } else if (typeof(a) === "boolean" && a === false) {
 
         return ('Переданное GIF-изображение не анимировано');
 
