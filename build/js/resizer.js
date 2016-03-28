@@ -119,6 +119,13 @@
       this._ctx.fillRect(-this._container.width / 2 - this._ctx.lineWidth, -this._resizeConstraint.side / 2 - this._ctx.lineWidth, this._container.width / 2 - this._resizeConstraint.side / 2, this._resizeConstraint.side + this._ctx.lineWidth * 2);
       this._ctx.fillRect(this._resizeConstraint.side / 2 + this._ctx.lineWidth, -this._resizeConstraint.side / 2 - this._ctx.lineWidth, this._container.width / 2 - this._resizeConstraint.side / 2, this._resizeConstraint.side + this._ctx.lineWidth * 2);
 
+      //Выводит размеры кадрируемого изображения над прямоугольником
+      this._ctx.fillStyle = 'white';
+      this._ctx.font = '12pt Arial';
+      this._ctx.textAlign = 'center';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight, 0, -this._resizeConstraint.side / 2 - this._ctx.lineWidth * 2);
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
