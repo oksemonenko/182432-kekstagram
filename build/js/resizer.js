@@ -112,6 +112,13 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+      //Отрисовка вокруг жёлтой рамки чёрного слоя с прозрачностью 80%
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      this._ctx.fillRect(-this._container.width / 2, -this._container.height / 2, this._container.width, this._container.height / 2 - this._resizeConstraint.side / 2 - this._ctx.lineWidth);
+      this._ctx.fillRect(-this._container.width / 2, this._container.height / 2 - this._container.height / 2 + this._resizeConstraint.side / 2 + this._ctx.lineWidth, this._container.width, this._container.height / 2 - this._resizeConstraint.side / 2 - this._ctx.lineWidth);
+      this._ctx.fillRect(-this._container.width / 2 - this._ctx.lineWidth, -this._resizeConstraint.side / 2 - this._ctx.lineWidth, this._container.width / 2 - this._resizeConstraint.side / 2, this._resizeConstraint.side + this._ctx.lineWidth * 2);
+      this._ctx.fillRect(this._resizeConstraint.side / 2 + this._ctx.lineWidth, -this._resizeConstraint.side / 2 - this._ctx.lineWidth, this._container.width / 2 - this._resizeConstraint.side / 2, this._resizeConstraint.side + this._ctx.lineWidth * 2);
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
