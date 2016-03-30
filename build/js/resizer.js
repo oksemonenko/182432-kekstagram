@@ -126,6 +126,39 @@
       this._ctx.textBaseline = 'bottom';
       this._ctx.fillText(this._image.naturalWidth + ' x ' + this._image.naturalHeight, 0, -this._resizeConstraint.side / 2 - this._ctx.lineWidth * 2);
 
+      // Дополнительное задание
+      // Переопределение стиля линии, чтобы скрыть пунктирную рамку
+      // Отрисовка рамки жёлтыми точками
+      this._ctx.strokeStyle = 'transparent';
+      var i = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
+      for (var j = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2; j <= this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2; j = j + 10) {
+        this._ctx.fillStyle = '#ffe753';
+        this._ctx.beginPath();
+        this._ctx.arc(j, i, 3, 0, Math.PI * 2, true);
+        this._ctx.fill();
+      }
+      i = this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2;
+      for (j = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2; j < this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2; j = j + 10) {
+        this._ctx.fillStyle = '#ffe753';
+        this._ctx.beginPath();
+        this._ctx.arc(j, i, 3, 0, Math.PI * 2, true);
+        this._ctx.fill();
+      }
+      j = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
+      for (i = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2; i < this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2; i = i + 10) {
+        this._ctx.fillStyle = '#ffe753';
+        this._ctx.beginPath();
+        this._ctx.arc(j, i, 3, 0, Math.PI * 2, true);
+        this._ctx.fill();
+      }
+      j = this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2;
+      for (i = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2; i < this._resizeConstraint.side / 2 + this._ctx.lineWidth / 2; i = i + 10) {
+        this._ctx.fillStyle = '#ffe753';
+        this._ctx.beginPath();
+        this._ctx.arc(j, i, 3, 0, Math.PI * 2, true);
+        this._ctx.fill();
+      }
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
