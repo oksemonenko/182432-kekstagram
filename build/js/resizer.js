@@ -112,13 +112,85 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+      //Отрисовка вокруг жёлтой рамки чёрного слоя с прозрачностью 80%
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      var w = this._container.width;
+      var h = this._container.height;
+      var s = this._resizeConstraint.side;
+      var l = this._ctx.lineWidth;
+
+      this._ctx.fillRect(
+        -w / 2,
+        -h / 2,
+        w,
+        h / 2 - s / 2 - l
+      );
+      this._ctx.fillRect(
+        -w / 2,
+        s / 2 + l,
+        w,
+        h / 2 - s / 2 - l
+      );
+      this._ctx.fillRect(
+        -w / 2 - l,
+        -s / 2 - l,
+        w / 2 - s / 2,
+        s + l * 2
+      );
+      this._ctx.fillRect(
+        s / 2 + l,
+        -s / 2 - l,
+        w / 2 - s / 2,
+        s + l * 2
+      );
+
+      //Выводит размеры кадрируемого изображения над прямоугольником
+      this._ctx.fillStyle = 'white';
+      this._ctx.font = '12pt Arial';
+      this._ctx.textAlign = 'center';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.fillText(
+        this._image.naturalWidth + ' x ' + this._image.naturalHeight,
+        0,
+        -this._resizeConstraint.side / 2 - this._ctx.lineWidth * 2
+      );
+
+      // Дополнительное задание
+      // Отрисовка рамки жёлтыми точками
+      // var i, j;
+      // var a = this._ctx;
+      // function drawRounds() {
+      //   a.fillStyle = '#ffe753';
+      //   a.beginPath();
+      //   a.arc(j, i, 3, 0, Math.PI * 2, true);
+      //   a.fill();
+      // }
+      // i = (-s / 2) - l / 2;
+      // for (j = (-s / 2) - l / 2; j < s / 2 + l / 2; j = j + 10) {
+      //   drawRounds();
+      // }
+      // i = s / 2 + l / 2;
+      // for (j = (-s / 2) - l / 2; j < s / 2 + l / 2; j = j + 10) {
+      //   drawRounds();
+      // }
+      // j = (-s / 2) - l / 2;
+      // for (i = (-s / 2) - l / 2; i < s / 2 + l / 2; i = i + 10) {
+      //   drawRounds();
+      // }
+      // j = s / 2 + l / 2;
+      // for (i = (-s / 2) - l / 2; i < s / 2 + l / 2; i = i + 10) {
+      //   drawRounds();
+      // }
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+          // this._resizeConstraint.side - this._ctx.lineWidth / 2,
+          // this._resizeConstraint.side - this._ctx.lineWidth / 2);
+          this._resizeConstraint.side + this._ctx.lineWidth,
+          this._resizeConstraint.side + this._ctx.lineWidth);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
