@@ -270,13 +270,16 @@
    * @param {HTMLInputElement} side1
    */
   var resizeControls = function(left1, top1, side1) {
-    if ((parseInt(left1.value, 10) + parseInt(side1.value, 10)) >= currentResizer._image.naturalWidth) {
+    var leftValue = parseInt(left1.value, 10);
+    var topValue = parseInt(top1.value, 10);
+    var sideValue = parseInt(side1.value, 10);
+    if ((leftValue + sideValue) > currentResizer._image.naturalWidth) {
       button.setAttribute('disabled', true);
-    } else if ((parseInt(top1.value, 10) + parseInt(side1.value, 10)) >= currentResizer._image.naturalHeight) {
+    } else if ((topValue + sideValue) > currentResizer._image.naturalHeight) {
       button.setAttribute('disabled', true);
-    } else if ((parseInt(left1.value, 10) < 0)) {
+    } else if (leftValue < 0) {
       button.setAttribute('disabled', true);
-    } else if ((parseInt(top1.value, 10) < 0)) {
+    } else if (topValue < 0) {
       button.setAttribute('disabled', true);
     }
   };
