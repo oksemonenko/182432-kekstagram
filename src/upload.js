@@ -256,4 +256,40 @@
 
   cleanupResizer();
   updateBackground();
+
+  var left = document.querySelector('#resize-x');
+  var top = document.querySelector('#resize-y');
+  var side = document.querySelector('#resize-size');
+  var button = document.querySelector('#resize-fwd');
+
+  /**
+   * Проверяет значения, введенные в поля ввода, и если они не соответствуют размеру картинки,
+   * дисейблит кнопку.
+   * @param {HTMLInputElement} left1
+   * @param {HTMLInputElement} top1
+   * @param {HTMLInputElement} side1
+   */
+  var resizeControls = function(left1, top1, side1) {
+    left1.min = 0;
+    top1.min = 0;
+    if ((parseInt(left1.value, 10) + parseInt(side1.value, 10)) >= currentResizer._image.naturalWidth) {
+      button.setAttribute('disabled', true);
+    } else if ((parseInt(top1.value, 10) + parseInt(side1.value, 10)) >= currentResizer._image.naturalHeight) {
+      button.setAttribute('disabled', true);
+    }
+  };
+
+  side.oninput = function() {
+    resizeControls(left, top, side);
+  };
+
+  left.oninput = function() {
+    resizeControls(left, top, side);
+  };
+
+  top.oninput = function() {
+    resizeControls(left, top, side);
+  };
+
+  resizeControls(left, top, side);
 })();
