@@ -301,39 +301,45 @@
     resizeControls(left, top, side);
   };
 
-  //Сохраняет в cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
-  //Срок жизни cookie — количество дней, прошедшее с моего ближайшего дня рождения (3 марта)
+  // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
+  // в том году, в котором будет запущен этот код
 
-  // var nowDate = Date.now();
-  // var dateObj = new Date(nowDate);
-  // var birthDate = new Date();
-  // var year1 = dateObj.getFullYear();
-  // var month1 = dateObj.getMonth();
-  // var day1 = dateObj.getDate();
-  // birthDate.setMonth(2);
-  // birthDate.setDate(3);
-  // var month2 = 2;
-  // var day2 = 3;
-  //
-  // if (month1 < month2) {
-  //   birthDate.setFullYear(year1 - 1);
-  // } else if (month1 === month2) {
-  //   if (day1 < day2) {
-  //     birthDate.setFullYear(year1 - 1);
-  //   }
-  // } else {
-  //   birthDate.setFullYear(year1);
-  // }
-  //
-  // var browserCookies = require('browser-cookies');
-  // var filter = document.querySelector('#upload-filter');
-  // var check = document.querySelector('input[name=upload-filter]:checked');
-  //
-  // filter.onsubmit = function(evt) {
-  //   evt.preventDefault();
-  //   browserCookies.set('check', check.value, {
-  //     expires: Date.now() + (nowDate - birthDate)
-  //   });
-  // };
+  var nowDate = Date.now();
+  var dateObj = new Date(nowDate);
+  var birthDate = new Date();
+  var year1 = dateObj.getFullYear();
+  var month1 = dateObj.getMonth();
+  var day1 = dateObj.getDate();
+  birthDate.setMonth(2);
+  birthDate.setDate(3);
+  var month2 = 2;
+  var day2 = 3;
+
+  if (month1 < month2) {
+    birthDate.setFullYear(year1 - 1);
+  } else if (month1 === month2) {
+    if (day1 < day2) {
+      birthDate.setFullYear(year1 - 1);
+    }
+  } else {
+    birthDate.setFullYear(year1);
+  }
+
+  var browserCookies = require('browser-cookies');
+  var filter = document.querySelector('#upload-filter');
+  var check = document.querySelector('input[name=upload-filter]:checked');
+  check.value = browserCookies.get('check') || 'none';
+  /**
+   *Сохраняет в cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
+   *Срок жизни cookie — количество дней, прошедшее с моего ближайшего дня рождения (3 марта)
+   * @param {Event} evt
+   */
+  filter.onsubmit = function(evt) {
+    evt.preventDefault();
+    browserCookies.set('check', check.value, {
+      expires: Date.now() + (nowDate - birthDate)
+    });
+    filter.submit();
+  };
 
 })();
