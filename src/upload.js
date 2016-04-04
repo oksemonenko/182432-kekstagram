@@ -261,11 +261,16 @@
   var top = document.querySelector('#resize-y');
   var side = document.querySelector('#resize-size');
   var button = document.querySelector('#resize-fwd');
+
+  /**
+   * Дисейблит кнопку
+   */
+  button.setAttribute('disabled', true);
   /**
    * Проверяет, являются ли значения, введенные в поля ввода, числами.
    */
   var checkCorrectNum = function(num) {
-    return (isFinite(+num) && (num !== ''));
+    return (isFinite(+num.value) && (num.value !== ''));
   };
   /**
    * Проверяет значения, введенные в поля ввода, и если они не соответствуют размеру картинки,
@@ -279,14 +284,17 @@
       var leftValue = Number(left1.value);
       var topValue = Number(top1.value);
       var sideValue = Number(side1.value);
-      if (!((leftValue + sideValue) > currentResizer._image.naturalWidth)
-        || ((topValue + sideValue) > currentResizer._image.naturalHeight)
-        || (leftValue < 0 || topValue < 0 || sideValue < 0)) {
+      if (!(
+          ((leftValue + sideValue) > currentResizer._image.naturalWidth)
+          || ((topValue + sideValue) > currentResizer._image.naturalHeight)
+          || (leftValue < 0 || topValue < 0 || sideValue < 0)
+        )) {
         button.removeAttribute('disabled');
         return;
       }
-      button.setAttribute('disabled', true);
+
     }
+    button.setAttribute('disabled', true);
   };
 
   side.oninput = left.oninput = top.oninput = function() {
