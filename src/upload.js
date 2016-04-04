@@ -256,4 +256,84 @@
 
   cleanupResizer();
   updateBackground();
+
+  var left = document.querySelector('#resize-x');
+  var top = document.querySelector('#resize-y');
+  var side = document.querySelector('#resize-size');
+  var button = document.querySelector('#resize-fwd');
+
+  /**
+   * Дисейблит кнопку
+   */
+  button.setAttribute('disabled', true);
+  /**
+   * Проверяет, являются ли значения, введенные в поля ввода, числами.
+   */
+  var checkCorrectNum = function(num) {
+    return (isFinite(+num.value) && (num.value !== ''));
+  };
+  /**
+   * Проверяет значения, введенные в поля ввода, и если они не соответствуют размеру картинки,
+   * дисейблит кнопку.
+   * @param {HTMLInputElement} left1
+   * @param {HTMLInputElement} top1
+   * @param {HTMLInputElement} side1
+   */
+  var resizeControls = function(left1, top1, side1) {
+    if (checkCorrectNum(left1) && checkCorrectNum(top1) && checkCorrectNum(side1)) {
+      var leftValue = Number(left1.value);
+      var topValue = Number(top1.value);
+      var sideValue = Number(side1.value);
+      if (!(
+          ((leftValue + sideValue) > currentResizer._image.naturalWidth)
+          || ((topValue + sideValue) > currentResizer._image.naturalHeight)
+          || (leftValue < 0 || topValue < 0 || sideValue < 0)
+        )) {
+        button.removeAttribute('disabled');
+        return;
+      }
+
+    }
+    button.setAttribute('disabled', true);
+  };
+
+  side.oninput = left.oninput = top.oninput = function() {
+    resizeControls(left, top, side);
+  };
+
+  //Сохраняет в cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
+  //Срок жизни cookie — количество дней, прошедшее с моего ближайшего дня рождения (3 марта)
+
+  // var nowDate = Date.now();
+  // var dateObj = new Date(nowDate);
+  // var birthDate = new Date();
+  // var year1 = dateObj.getFullYear();
+  // var month1 = dateObj.getMonth();
+  // var day1 = dateObj.getDate();
+  // birthDate.setMonth(2);
+  // birthDate.setDate(3);
+  // var month2 = 2;
+  // var day2 = 3;
+  //
+  // if (month1 < month2) {
+  //   birthDate.setFullYear(year1 - 1);
+  // } else if (month1 === month2) {
+  //   if (day1 < day2) {
+  //     birthDate.setFullYear(year1 - 1);
+  //   }
+  // } else {
+  //   birthDate.setFullYear(year1);
+  // }
+  //
+  // var browserCookies = require('browser-cookies');
+  // var filter = document.querySelector('#upload-filter');
+  // var check = document.querySelector('input[name=upload-filter]:checked');
+  //
+  // filter.onsubmit = function(evt) {
+  //   evt.preventDefault();
+  //   browserCookies.set('check', check.value, {
+  //     expires: Date.now() + (nowDate - birthDate)
+  //   });
+  // };
+
 })();
