@@ -321,22 +321,31 @@
     if (day1 < day2) {
       birthDate.setFullYear(year1 - 1);
     }
-  } else {
-    birthDate.setFullYear(year1);
   }
 
   var browserCookies = require('browser-cookies');
-  var filter = document.querySelector('#upload-filter');
-  var check = document.querySelector('input[name=upload-filter]:checked');
-  check.value = browserCookies.get('check') || 'none';
+  var uploadFilter = document.querySelector('#upload-filter');
+  var filterControlsForm = document.querySelector('.upload-filter-controls');
+  var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
+
+  //Читает из cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
+  //Ищет кнопку с этим фильтром и добавляет ей атрибут checked.
+  var setFilter = function() {
+    var currentFilter = browserCookies.get('filter') || 'none';
+    var currentInput = filterControlsForm.getElementById('upload-filter-' + currentFilter);
+    currentInput.setAttribute('checked', true);
+  };
+
+  setFilter();
+
   /**
    *Сохраняет в cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
    *Срок жизни cookie — количество дней, прошедшее с моего ближайшего дня рождения (3 марта)
    * @param {Event} evt
    */
-  filter.onsubmit = function(evt) {
+  uploadFilter.onsubmit = function(evt) {
     evt.preventDefault();
-    browserCookies.set('check', check.value, {
+    browserCookies.set('filter', filter.value, {
       expires: Date.now() + (nowDate - birthDate)
     });
     filter.submit();
