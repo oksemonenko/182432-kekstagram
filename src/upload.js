@@ -257,8 +257,10 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
     var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
+    var date = new Date(Date.now() + (Date.now() - getBirthDate()));
+    var expiresDate = date.toUTCString();
     browserCookies.set('filter', filter.value, {
-      expires: Date.now() + (Date.now() - getBirthDate())
+      expires: expiresDate
     });
     cleanupResizer();
     updateBackground();
