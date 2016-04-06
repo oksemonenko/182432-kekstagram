@@ -238,15 +238,16 @@
 
   var browserCookies = require('browser-cookies');
   var filterControlsForm = document.querySelector('.upload-filter-controls');
-  var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
+
   //
   // //Читает из cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
   // //Ищет кнопку с этим фильтром и добавляет ей атрибут checked.
   var setFilter = function() {
     var currentFilter = browserCookies.get('filter') || 'none';
-    var currentInput = filterControlsForm.getElementById('upload-filter-' + currentFilter);
+    var currentInput = filterControlsForm.querySelector('input[type=radio][value=' + currentFilter + ']');
     currentInput.setAttribute('checked', true);
   };
+  setFilter();
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
@@ -255,19 +256,15 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
+    var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
     browserCookies.set('filter', filter.value, {
       expires: Date.now() + (Date.now() - getBirthDate())
     });
-    //filterForm.submit();
-
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
-
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
@@ -340,6 +337,4 @@
   side.oninput = left.oninput = top.oninput = function() {
     resizeControls(left, top, side);
   };
-
-  setFilter();
 })();
