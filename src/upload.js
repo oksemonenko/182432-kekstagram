@@ -213,6 +213,42 @@
     resizeForm.classList.remove('invisible');
   };
 
+  // // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
+  // // в том году, в котором будет запущен этот код
+  function getBirthDate() {
+    var dateObj = new Date(Date.now());
+    var birthDate = new Date();
+    var year1 = dateObj.getFullYear();
+    var month1 = dateObj.getMonth();
+    var day1 = dateObj.getDate();
+    birthDate.setMonth(2);
+    birthDate.setDate(3);
+    var month2 = 2;
+    var day2 = 3;
+
+    if (month1 < month2) {
+      birthDate.setFullYear(year1 - 1);
+    } else if (month1 === month2) {
+      if (day1 < day2) {
+        birthDate.setFullYear(year1 - 1);
+      }
+    }
+    return birthDate;
+  }
+
+  var browserCookies = require('browser-cookies');
+  var filterControlsForm = document.querySelector('.upload-filter-controls');
+
+  //
+  // //Читает из cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
+  // //Ищет кнопку с этим фильтром и добавляет ей атрибут checked.
+  var setFilter = function() {
+    var currentFilter = browserCookies.get('filter') || 'none';
+    var currentInput = filterControlsForm.querySelector('input[type=radio][value=' + currentFilter + ']');
+    currentInput.setAttribute('checked', true);
+  };
+  setFilter();
+
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
@@ -220,14 +256,17 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
+    var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
+    var date = new Date(Date.now() + (Date.now() - getBirthDate()));
+    var expiresDate = date.toUTCString();
+    browserCookies.set('filter', filter.value, {
+      expires: expiresDate
+    });
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
-
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
@@ -300,40 +339,4 @@
   side.oninput = left.oninput = top.oninput = function() {
     resizeControls(left, top, side);
   };
-
-  //Сохраняет в cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
-  //Срок жизни cookie — количество дней, прошедшее с моего ближайшего дня рождения (3 марта)
-
-  // var nowDate = Date.now();
-  // var dateObj = new Date(nowDate);
-  // var birthDate = new Date();
-  // var year1 = dateObj.getFullYear();
-  // var month1 = dateObj.getMonth();
-  // var day1 = dateObj.getDate();
-  // birthDate.setMonth(2);
-  // birthDate.setDate(3);
-  // var month2 = 2;
-  // var day2 = 3;
-  //
-  // if (month1 < month2) {
-  //   birthDate.setFullYear(year1 - 1);
-  // } else if (month1 === month2) {
-  //   if (day1 < day2) {
-  //     birthDate.setFullYear(year1 - 1);
-  //   }
-  // } else {
-  //   birthDate.setFullYear(year1);
-  // }
-  //
-  // var browserCookies = require('browser-cookies');
-  // var filter = document.querySelector('#upload-filter');
-  // var check = document.querySelector('input[name=upload-filter]:checked');
-  //
-  // filter.onsubmit = function(evt) {
-  //   evt.preventDefault();
-  //   browserCookies.set('check', check.value, {
-  //     expires: Date.now() + (nowDate - birthDate)
-  //   });
-  // };
-
 })();
