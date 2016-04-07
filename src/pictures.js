@@ -34,13 +34,14 @@ var getPictureElement = function(data, container) {
   var imageLoadTimeout;
   image.onload = function() {
     clearTimeout(imageLoadTimeout);
-    imageFromData.src = data.url;
+    imageFromData.src = image.src;
     imageFromData.width = '182';
     imageFromData.height = '182';
   };
   image.onerror = function() {
     imageFromData.classList.add('picture-load-failure');
   };
+  image.src = data.url;
 
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 15000;
