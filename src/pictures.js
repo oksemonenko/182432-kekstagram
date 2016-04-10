@@ -16,6 +16,10 @@ if ('content' in templateElement) {
 } else {
   elementToClone = templateElement.querySelector('.picture');
 }
+
+/* @constant {String} */
+var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
+
 /**Функция, которая создает DOM-элемент картинки и добавляет его на страницу
  * @param {Object} data
  * @param {HTMLElement} container
@@ -52,8 +56,28 @@ var getPictureElement = function(data, container) {
   return element;
 };
 
-window.pictures.forEach(function(picture) {
-  getPictureElement(picture, picturesContainer);
+/** @param {function(Array.<Object>)} callback*/
+var getPictures = function(callback) {
+  var xhr = new XMLHttpRequest();
+  /** @param {ProgressEvent} */
+  xhr.onload = function(evt) {
+    var loadedData = JSON.parse(evt.target.response);
+    callback(loadedData);
+  };
+  xhr.open('GET', PICTURES_DATA_URL);
+  xhr.send();
+};
+
+/** @param {Array.<Object>} pictures */
+var receivedPictures = function(pictures) {
+  pictures.forEach(function(picture) {
+    getPictureElement(picture, picturesContainer);
+  });
+};
+
+getPictures(function(loadedPictures) {
+  var pictures = loadedPictures;
+  receivedPictures(pictures);
 });
 
 // Отображает блок с фильтрами
