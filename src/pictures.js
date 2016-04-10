@@ -60,9 +60,25 @@ var getPictureElement = function(data, container) {
 var getPictures = function(callback) {
   var xhr = new XMLHttpRequest();
   /** @param {ProgressEvent} */
-  xhr.onload = function(evt) {
-    var loadedData = JSON.parse(evt.target.response);
-    callback(loadedData);
+  // xhr.onload = function(evt) {
+  //   var loadedData = JSON.parse(evt.target.response);
+  //   callback(loadedData);
+  // };
+  xhr.onreadystatechange = function(evt) {
+    if (xhr.readyState < 4) {
+      picturesContainer.classList.add('pictures-loading');
+    } else {
+      var loadedData = JSON.parse(evt.target.response);
+      callback(loadedData);
+      picturesContainer.classList.remove('pictures-loading');
+    }
+  };
+  xhr.onerror = function() {
+    picturesContainer.classList.add('pictures-failure');
+  };
+  xhr.timeout = 15000;
+  xhr.ontimeout = function() {
+    picturesContainer.classList.add('pictures-failure');
   };
   xhr.open('GET', PICTURES_DATA_URL);
   xhr.send();
