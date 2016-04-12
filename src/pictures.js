@@ -116,11 +116,13 @@ var getFilteredPictures = function(pics, filter) {
       });
       break;
     case Filter.NEW:
-      var onDatePictures = picturesToFilter.filter(function(picsDate) {
-        return picsDate > (Date.now() - 14 * 24 * 60 * 60 * 1000);
+      picturesToFilter.filter(function(picsDate) {
+        var twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).valueOf();
+        var dateOfPicture = new Date(picsDate.date).valueOf();
+        return dateOfPicture > twoWeeksAgo;
       });
-      onDatePictures.sort(function(a, b) {
-        return b.date - a.date;
+      picturesToFilter.sort(function(a, b) {
+        return new Date(b.date).valueOf() - new Date(a.date).valueOf();
       });
       break;
   }
@@ -141,7 +143,7 @@ var realiseFilter = function(filter) {
 
 /** @param {boolean} enabled */
 var realiseFilters = function(enabled) {
-  var filters = document.querySelectorAll('filters-radio');
+  var filters = document.querySelectorAll('.filters-radio');
   for (var i = 0; i < filters.length; i++) {
     filters[i].onclick = enabled ? function() {
       realiseFilter(this.id);
