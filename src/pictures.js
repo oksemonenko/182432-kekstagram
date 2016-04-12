@@ -88,6 +88,7 @@ var getPictures = function(callback) {
   xhr.timeout = 15000;
   xhr.onerror = xhr.ontimeout = function() {
     picturesContainer.classList.add('pictures-failure');
+    picturesContainer.classList.remove('pictures-loading');
   };
   xhr.open('GET', PICTURES_DATA_URL);
   xhr.send();
