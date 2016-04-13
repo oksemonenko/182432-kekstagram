@@ -189,13 +189,17 @@ var isNextPageAvailable = function(pics, page, pageSize) {
 };
 
 var realiseScroll = function() {
+  var scrollTimeout;
   window.addEventListener('scroll', function() {
-    if (isBottomReached() &&
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      if (isBottomReached() &&
         isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
-      pageNumber++;
-      renderPictures(filteredPictures, pageNumber);
-    }
-  }, 100);
+        pageNumber++;
+        renderPictures(filteredPictures, pageNumber);
+      }
+    }, 100);
+  });
 };
 
 getPictures(function(loadedPictures) {
