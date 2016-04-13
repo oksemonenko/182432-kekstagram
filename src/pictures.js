@@ -26,6 +26,15 @@ var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
 /** @type {Array.<Object>} */
 var pictures = [];
 
+/** @type {Array.<Object>} */
+var filteredPictures = [];
+
+/** @constant {number} */
+var PAGE_SIZE = 12;
+
+/** @type {number} */
+var pageNumber = 0;
+
 /** @enum {number} */
 var Filter = {
   'POPULAR': 'filter-popular',
@@ -94,10 +103,18 @@ var getPictures = function(callback) {
   xhr.send();
 };
 
-/** @param {Array.<Object>} pics */
-var renderPictures = function(pics) {
-  picturesContainer.innerHTML = '';
-  pics.forEach(function(picture) {
+/** @param {Array.<Object>} pics
+ * @param {number} page
+ * @param {boolean=} replace
+ * */
+var renderPictures = function(pics, page, replace) {
+  if (replace) {
+    picturesContainer.innerHTML = '';
+  }
+
+  var from = page * PAGE_SIZE;
+  var to = from + PAGE_SIZE;
+  pics.slice(from, to).forEach(function(picture) {
     getPictureElement(picture, picturesContainer);
   });
 };
@@ -132,8 +149,9 @@ var getFilteredPictures = function(pics, filter) {
 
 /** @param {string} filter */
 var realiseFilter = function(filter) {
-  var filteredPictures = getFilteredPictures(pictures, filter);
-  renderPictures(filteredPictures);
+  filteredPictures = getFilteredPictures(pictures, filter);
+  pageNumber = 0;
+  renderPictures(filteredPictures, pageNumber, true);
   var activeFilter = filtersContainer.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
   if (activeFilter) {
     activeFilter.classList.remove(ACTIVE_FILTER_CLASSNAME);
@@ -152,10 +170,39 @@ var realiseFilters = function(enabled) {
   }
 };
 
+/** @return {boolean} */
+var isBottomReached = function() {
+  var GAP = 100;
+  var bodyElement = document.querySelector('body');
+  var bodyPosition = bodyElement.getBoundingClientRect();
+  return bodyPosition.bottom - window.innerHeight - GAP <= 0;
+};
+
+/**
+ * @param {Array} pics
+ * @param {number} page
+ * @param {number} pageSize
+ * @return {boolean}
+ */
+var isNextPageAvailable = function(pics, page, pageSize) {
+  return page < Math.floor(pics.length / pageSize);
+};
+
+var realiseScroll = function() {
+  window.addEventListener('scroll', function() {
+    if (isBottomReached() &&
+        isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+      pageNumber++;
+      renderPictures(filteredPictures, pageNumber);
+    }
+  }, 100);
+};
+
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
   realiseFilters(true);
   realiseFilter(DEFAULT_FILTER);
+  realiseScroll();
 });
 
 // Отображает блок с фильтрами
