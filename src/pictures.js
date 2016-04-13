@@ -160,14 +160,12 @@ var realiseFilter = function(filter) {
   filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
 };
 
-/** @param {boolean} enabled */
-var realiseFilters = function(enabled) {
-  var filters = document.querySelectorAll('.filters-radio');
-  for (var i = 0; i < filters.length; i++) {
-    filters[i].onclick = enabled ? function() {
-      realiseFilter(this.id);
-    } : null;
-  }
+var realiseFilters = function() {
+  filtersContainer.addEventListener('click', function(evt) {
+    if (evt.target.classList.contains('filters-radio')) {
+      realiseFilter(evt.target.id);
+    }
+  });
 };
 
 /** @return {boolean} */
