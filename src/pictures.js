@@ -210,7 +210,7 @@ var isScreenResolutionBig = function() {
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
-  realiseFilters(true);
+  realiseFilters();
   realiseFilter(DEFAULT_FILTER);
   realiseScroll();
   isScreenResolutionBig();
