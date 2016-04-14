@@ -111,7 +111,6 @@ var renderPictures = function(pics, page, replace) {
   if (replace) {
     picturesContainer.innerHTML = '';
   }
-
   var from = page * PAGE_SIZE;
   var to = from + PAGE_SIZE;
   pics.slice(from, to).forEach(function(picture) {
@@ -200,11 +199,21 @@ var realiseScroll = function() {
   });
 };
 
+//Проверка того, все ли фотографии показаны при большом разрешении экрана
+var isScreenResolutionBig = function() {
+  if (document.body.clientWidth >= '1024' &&
+    isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+    pageNumber++;
+    renderPictures(filteredPictures, pageNumber);
+  }
+};
+
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
   realiseFilters(true);
   realiseFilter(DEFAULT_FILTER);
   realiseScroll();
+  isScreenResolutionBig();
 });
 
 // Отображает блок с фильтрами
