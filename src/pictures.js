@@ -37,16 +37,13 @@ var pageNumber = 0;
 
 /** @enum {number} */
 var Filter = {
-  'POPULAR': 'filter-popular',
-  'NEW': 'filter-new',
-  'DISCUSSED': 'filter-discussed'
+  'POPULAR': 'popular',
+  'NEW': 'new',
+  'DISCUSSED': 'discussed'
 };
 
 /** @constant {Filter} */
 var DEFAULT_FILTER = Filter.POPULAR;
-
-/** @constant {string} */
-var ACTIVE_FILTER_CLASSNAME = 'picture-filter-active';
 
 /**Функция, которая создает DOM-элемент картинки и добавляет его на страницу
  * @param {Object} data
@@ -151,18 +148,18 @@ var realiseFilter = function(filter) {
   filteredPictures = getFilteredPictures(pictures, filter);
   pageNumber = 0;
   renderPictures(filteredPictures, pageNumber, true);
-  var activeFilter = filtersContainer.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
+  var activeFilter = filtersContainer.querySelector('input[type=radio]:checked');
   if (activeFilter) {
-    activeFilter.classList.remove(ACTIVE_FILTER_CLASSNAME);
+    activeFilter.removeAttribute('checked');
   }
-  var filterToActivate = document.getElementById(filter);
-  filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
+  var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filter + ']');
+  filterToActivate.setAttribute('checked', true);
 };
 
 var realiseFilters = function() {
   filtersContainer.addEventListener('click', function(evt) {
     if (evt.target.classList.contains('filters-radio')) {
-      realiseFilter(evt.target.id);
+      realiseFilter(evt.target.value);
     }
   });
 };
@@ -170,9 +167,10 @@ var realiseFilters = function() {
 /** @return {boolean} */
 var isBottomReached = function() {
   var GAP = 100;
-  var bodyElement = document.querySelector('body');
+  var bodyElement = document.body;
   var bodyPosition = bodyElement.getBoundingClientRect();
-  return bodyPosition.bottom - window.innerHeight - GAP <= 0;
+  var windowHeight = document.documentElement.clientHeight;
+  return bodyPosition.bottom - windowHeight - GAP <= 0;
 };
 
 /**
