@@ -198,20 +198,21 @@ var realiseScroll = function() {
 };
 
 //Проверка того, все ли фотографии показаны при большом разрешении экрана
-//Закомментировано как дополнительное задание
-// var isScreenResolutionBig = function() {
-//   if (document.body.clientWidth >= '1024' &&
-//     isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
-//     pageNumber++;
-//     renderPictures(filteredPictures, pageNumber);
-//   }
-// };
+function isScreenFull() {
+  var windowHeight = document.documentElement.clientHeight;
+  var picturesContainerBottom = picturesContainer.getBoundingClientRect().bottom;
+  if (picturesContainerBottom < windowHeight) {
+    pageNumber++;
+    renderPictures(filteredPictures, pageNumber);
+  }
+}
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
   realiseFilters();
   realiseFilter(DEFAULT_FILTER);
   realiseScroll();
+  isScreenFull();
 });
 
 // Отображает блок с фильтрами
