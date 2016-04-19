@@ -26,18 +26,24 @@ var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
 /** @type {Array.<Object>} */
 var pictures = [];
 
+/** @type {Array.<Object>} */
+var filteredPictures = [];
+
+/** @constant {number} */
+var PAGE_SIZE = 12;
+
+/** @type {number} */
+var pageNumber = 0;
+
 /** @enum {number} */
 var Filter = {
-  'POPULAR': 'filter-popular',
-  'NEW': 'filter-new',
-  'DISCUSSED': 'filter-discussed'
+  'POPULAR': 'popular',
+  'NEW': 'new',
+  'DISCUSSED': 'discussed'
 };
 
 /** @constant {Filter} */
 var DEFAULT_FILTER = Filter.POPULAR;
-
-/** @constant {string} */
-var ACTIVE_FILTER_CLASSNAME = 'picture-filter-active';
 
 /**Функция, которая создает DOM-элемент картинки и добавляет его на страницу
  * @param {Object} data
@@ -94,10 +100,17 @@ var getPictures = function(callback) {
   xhr.send();
 };
 
-/** @param {Array.<Object>} pics */
-var renderPictures = function(pics) {
-  picturesContainer.innerHTML = '';
-  pics.forEach(function(picture) {
+/** @param {Array.<Object>} pics
+ * @param {number} page
+ * @param {boolean=} replace
+ * */
+var renderPictures = function(pics, page, replace) {
+  if (replace) {
+    picturesContainer.innerHTML = '';
+  }
+  var from = page * PAGE_SIZE;
+  var to = from + PAGE_SIZE;
+  pics.slice(from, to).forEach(function(picture) {
     getPictureElement(picture, picturesContainer);
   });
 };
@@ -132,30 +145,75 @@ var getFilteredPictures = function(pics, filter) {
 
 /** @param {string} filter */
 var realiseFilter = function(filter) {
-  var filteredPictures = getFilteredPictures(pictures, filter);
-  renderPictures(filteredPictures);
-  var activeFilter = filtersContainer.querySelector('.' + ACTIVE_FILTER_CLASSNAME);
+  filteredPictures = getFilteredPictures(pictures, filter);
+  pageNumber = 0;
+  renderPictures(filteredPictures, pageNumber, true);
+  var activeFilter = filtersContainer.querySelector('input[type=radio]:checked');
   if (activeFilter) {
-    activeFilter.classList.remove(ACTIVE_FILTER_CLASSNAME);
+    activeFilter.removeAttribute('checked');
   }
-  var filterToActivate = document.getElementById(filter);
-  filterToActivate.classList.add(ACTIVE_FILTER_CLASSNAME);
+  var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filter + ']');
+  filterToActivate.setAttribute('checked', true);
+  addPageUntilScreenFull();
 };
 
-/** @param {boolean} enabled */
-var realiseFilters = function(enabled) {
-  var filters = document.querySelectorAll('.filters-radio');
-  for (var i = 0; i < filters.length; i++) {
-    filters[i].onclick = enabled ? function() {
-      realiseFilter(this.id);
-    } : null;
-  }
+var realiseFilters = function() {
+  filtersContainer.addEventListener('click', function(evt) {
+    if (evt.target.classList.contains('filters-radio')) {
+      realiseFilter(evt.target.value);
+    }
+  });
 };
+
+/** @return {boolean} */
+var isBottomReached = function() {
+  var GAP = 100;
+  var bodyElement = document.body;
+  var bodyPosition = bodyElement.getBoundingClientRect();
+  var windowHeight = document.documentElement.clientHeight;
+  return bodyPosition.bottom - windowHeight - GAP <= 0;
+};
+
+/**
+ * @param {Array} pics
+ * @param {number} page
+ * @param {number} pageSize
+ * @return {boolean}
+ */
+var isNextPageAvailable = function(pics, page, pageSize) {
+  return page < Math.floor(pics.length / pageSize);
+};
+
+var realiseScroll = function() {
+  var scrollTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      if (isBottomReached() &&
+        isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+        pageNumber++;
+        renderPictures(filteredPictures, pageNumber);
+      }
+    }, 100);
+  });
+};
+
+//Проверка того, все ли фотографии показаны при большом разрешении экрана
+function addPageUntilScreenFull() {
+  var windowHeight = document.documentElement.clientHeight;
+  var picturesContainerBottom = picturesContainer.getBoundingClientRect().bottom;
+  if (picturesContainerBottom < windowHeight) {
+    pageNumber++;
+    renderPictures(filteredPictures, pageNumber);
+    addPageUntilScreenFull();
+  }
+}
 
 getPictures(function(loadedPictures) {
   pictures = loadedPictures;
-  realiseFilters(true);
+  realiseFilters();
   realiseFilter(DEFAULT_FILTER);
+  realiseScroll();
 });
 
 // Отображает блок с фильтрами
