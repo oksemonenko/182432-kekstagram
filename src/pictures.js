@@ -154,6 +154,7 @@ var realiseFilter = function(filter) {
   }
   var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filter + ']');
   filterToActivate.setAttribute('checked', true);
+  addPageUntilScreenFull();
 };
 
 var realiseFilters = function() {
@@ -198,12 +199,13 @@ var realiseScroll = function() {
 };
 
 //Проверка того, все ли фотографии показаны при большом разрешении экрана
-function isScreenFull() {
+function addPageUntilScreenFull() {
   var windowHeight = document.documentElement.clientHeight;
   var picturesContainerBottom = picturesContainer.getBoundingClientRect().bottom;
   if (picturesContainerBottom < windowHeight) {
     pageNumber++;
     renderPictures(filteredPictures, pageNumber);
+    addPageUntilScreenFull();
   }
 }
 
@@ -212,7 +214,6 @@ getPictures(function(loadedPictures) {
   realiseFilters();
   realiseFilter(DEFAULT_FILTER);
   realiseScroll();
-  isScreenFull();
 });
 
 // Отображает блок с фильтрами
