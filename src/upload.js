@@ -182,12 +182,9 @@
   /* @param {number} size
    */
   var synchronizeResizerWithForm = function() {
-    var x = currentResizer.getConstraint().x;
-    var y = currentResizer.getConstraint().y;
-    var side = currentResizer.getConstraint().side;
-    inputX.value = x;
-    inputY.value = y;
-    inputSize.value = side;
+    inputX.value = currentResizer.getConstraint().x;
+    inputY.value = currentResizer.getConstraint().y;
+    inputSize.value = currentResizer.getConstraint().side;
   };
   //Добавляет обработчик события синхронизации ресайзера и формы
   window.addEventListener('resizerchange', synchronizeResizerWithForm);
@@ -368,13 +365,11 @@
     button.setAttribute('disabled', true);
   };
 
-  side.addEventListener('input', function() {
+  var resizeControlsEvt = function() {
     resizeControls(left, top, side);
-  });
-  left.addEventListener('input', function() {
-    resizeControls(left, top, side);
-  });
-  top.addEventListener('input', function() {
-    resizeControls(left, top, side);
+  };
+  var formInputs = [left, top, side];
+  formInputs.forEach(function(formInput) {
+    formInput.addEventListener('input', resizeControlsEvt);
   });
 })();
