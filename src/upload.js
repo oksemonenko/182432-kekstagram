@@ -139,7 +139,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -149,7 +149,7 @@
 
         showMessage(Action.UPLOADING);
 
-        fileReader.onload = function() {
+        fileReader.addEventListener('load', function() {
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
@@ -160,7 +160,7 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-        };
+        });
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -169,14 +169,46 @@
         showMessage(Action.ERROR);
       }
     }
+  });
+
+  var inputX = resizeForm.elements.x;
+  var inputY = resizeForm.elements.y;
+  var inputSize = resizeForm.elements.size;
+  //Синхронизация ресайзера и формы:
+  //берет значения смещения и размера кадра
+  //из объекта resizer и добавляет их в форму
+  /* @param {number} x
+  /* @param {number} y
+  /* @param {number} size
+   */
+  var synchronizeResizerWithForm = function() {
+    var x = currentResizer.getConstraint().x;
+    var y = currentResizer.getConstraint().y;
+    var side = currentResizer.getConstraint().side;
+    inputX.value = x;
+    inputY.value = y;
+    inputSize.value = side;
   };
+  //Добавляет обработчик события синхронизации ресайзера и формы
+  window.addEventListener('resizerchange', synchronizeResizerWithForm);
+  //Обновление ресайзера по изменению значений формы:
+  //берет значения из полей формы
+  //и устанавливает их объекту resizer
+  var updateResizer = function() {
+    currentResizer.setConstraint(+inputX.value, +inputY.value, +inputSize.value);
+  };
+  //Добавляет обработчики события для полей формы
+  inputX.addEventListener('input', updateResizer);
+  inputY.addEventListener('input', updateResizer);
+  inputSize.addEventListener('input', updateResizer);
+
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -184,14 +216,14 @@
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -200,18 +232,18 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
+  });
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
 
   // // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
   // // в том году, в котором будет запущен этот код
@@ -254,7 +286,7 @@
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
     var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
     var date = new Date(Date.now() + (Date.now() - getBirthDate()));
@@ -266,12 +298,12 @@
     updateBackground();
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', function() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -291,7 +323,7 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  });
 
   cleanupResizer();
   updateBackground();
@@ -336,7 +368,13 @@
     button.setAttribute('disabled', true);
   };
 
-  side.oninput = left.oninput = top.oninput = function() {
+  side.addEventListener('input', function() {
     resizeControls(left, top, side);
-  };
+  });
+  left.addEventListener('input', function() {
+    resizeControls(left, top, side);
+  });
+  top.addEventListener('input', function() {
+    resizeControls(left, top, side);
+  });
 })();
