@@ -16,6 +16,7 @@ require([
   './picture',
   './load',
   './utilities',
+ // './gallery',
   './resizer',
   './upload'
 ], function(filter, FilterType, getPictureElement, load, utilities) {
@@ -69,6 +70,7 @@ require([
     var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filterType + ']');
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
+   // savePictures();
   };
 
   var realiseFilters = function() {
