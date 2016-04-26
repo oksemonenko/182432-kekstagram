@@ -19,9 +19,10 @@ define([
   }
   /* @param {Object} data
    * @param {HTMLElement} container
+   * @param {number} pictureIndex
    * @return {HTMLElement}
    */
-  return function(data, container) {
+  return function(data, container, pictureIndex) {
     var element = elementToClone.cloneNode(true);
     var imageFromData = element.querySelector('img');
     element.querySelector('.picture-comments').textContent = data.comments;
@@ -48,7 +49,7 @@ define([
     }, IMAGE_LOAD_TIMEOUT);
     element.addEventListener('click', function(evt) {
       evt.preventDefault();
-      gallery.showGallery();
+      gallery.showGallery(pictureIndex);
     });
     return element;
   };
