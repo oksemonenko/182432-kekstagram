@@ -5,7 +5,9 @@
 
 'use strict';
 
-define(function() {
+define([
+  './gallery'
+], function(gallery) {
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 15000;
   var templateElement = document.querySelector('template');
@@ -44,6 +46,10 @@ define(function() {
       imageFromData.src = '';
       imageFromData.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
+    element.addEventListener('click', function(evt) {
+      evt.preventDefault();
+      gallery.showGallery();
+    });
     return element;
   };
 });
