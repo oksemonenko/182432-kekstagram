@@ -72,7 +72,7 @@ require([
     var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filterType + ']');
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
-    gallery.savePictures(pictures);
+    gallery.savePictures(filteredPictures);
   };
 
   var realiseFilters = function() {
