@@ -56,8 +56,7 @@ require([
     var to = from + PAGE_SIZE;
     var pictureIndex = from;
     pics.slice(from, to).forEach(function(picture) {
-      getPictureElement(picture, picturesContainer, pictureIndex);
-      pictureIndex++;
+      getPictureElement(picture, picturesContainer, pictureIndex++);
     });
   };
   /** @param {FilterType} filterType */
