@@ -16,9 +16,10 @@ require([
   './picture',
   './load',
   './utilities',
+  './gallery',
   './resizer',
   './upload'
-], function(filter, FilterType, getPictureElement, load, utilities) {
+], function(filter, FilterType, getPictureElement, load, utilities, gallery) {
   // Прячет блок с фильтрами
   var filtersContainer = document.querySelector('.filters');
   filtersContainer.classList.add('hidden');
@@ -53,8 +54,9 @@ require([
     }
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
+    var pictureIndex = from;
     pics.slice(from, to).forEach(function(picture) {
-      getPictureElement(picture, picturesContainer);
+      getPictureElement(picture, picturesContainer, pictureIndex++);
     });
   };
   /** @param {FilterType} filterType */
@@ -69,6 +71,7 @@ require([
     var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filterType + ']');
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
+    gallery.savePictures(filteredPictures);
   };
 
   var realiseFilters = function() {

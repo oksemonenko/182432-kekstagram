@@ -5,7 +5,9 @@
 
 'use strict';
 
-define(function() {
+define([
+  './gallery'
+], function(gallery) {
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 15000;
   var templateElement = document.querySelector('template');
@@ -17,9 +19,10 @@ define(function() {
   }
   /* @param {Object} data
    * @param {HTMLElement} container
+   * @param {number} pictureIndex
    * @return {HTMLElement}
    */
-  return function(data, container) {
+  return function(data, container, pictureIndex) {
     var element = elementToClone.cloneNode(true);
     var imageFromData = element.querySelector('img');
     element.querySelector('.picture-comments').textContent = data.comments;
@@ -44,6 +47,10 @@ define(function() {
       imageFromData.src = '';
       imageFromData.classList.add('picture-load-failure');
     }, IMAGE_LOAD_TIMEOUT);
+    element.addEventListener('click', function(evt) {
+      evt.preventDefault();
+      gallery.showGallery(pictureIndex);
+    });
     return element;
   };
 });
