@@ -71,6 +71,7 @@ require([
     filteredPictures = filter(pictures, filterType);
     pageNumber = 0;
     renderPictures(filteredPictures, pageNumber, true);
+    filterType = localStorage.getItem('lastFilter');
     var activeFilter = filtersContainer.querySelector('input[type=radio]:checked');
     if (activeFilter) {
       activeFilter.removeAttribute('checked');
@@ -79,6 +80,7 @@ require([
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
+    localStorage.setItem('lastFilter', activeFilter.value);
   };
 
   var realiseFilters = function() {
