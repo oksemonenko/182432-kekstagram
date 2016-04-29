@@ -54,7 +54,6 @@ require([
    * */
   var renderPictures = function(pics, page, replace) {
     if (replace) {
-      //picturesContainer.innerHTML = '';
       renderedPictures.forEach(function(picture) {
         picture.remove();
       });
@@ -64,7 +63,6 @@ require([
     var to = from + PAGE_SIZE;
     var pictureIndex = from;
     pics.slice(from, to).forEach(function(picture) {
-      //getPictureElement(picture, picturesContainer, pictureIndex++);
       renderedPictures.push(new Picture(picture, picturesContainer, pictureIndex++));
     });
   };
