@@ -147,11 +147,11 @@ define(function() {
   //Функция показа фотографии по ее индексу в массиве
   this.showPicture = function(pictureIndex) {
     this.pictureIndexToShow = pictureIndex;
-    var picture = this.galleryPictures[pictureIndex];
-    galleryImage.src = picture.url;
+    this.picture = this.galleryPictures[pictureIndex];
+    galleryImage.src = this.picture.url;
     galleryImage.width = '642';
-    this.galleryContainer.querySelector('.comments-count').textContent = picture.comments;
-    this.galleryContainer.querySelector('.likes-count').textContent = picture.likes;
+    this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
+    this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
   };
   //Функция, которая скрывает галерею
   this.hideGallery = function() {
