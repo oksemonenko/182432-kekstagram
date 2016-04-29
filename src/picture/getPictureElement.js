@@ -6,7 +6,7 @@
 'use strict';
 
 define([
-  './gallery'
+  './../gallery'
 ], function(gallery) {
   /** @constant {number} */
   var IMAGE_LOAD_TIMEOUT = 15000;

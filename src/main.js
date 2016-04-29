@@ -13,19 +13,20 @@
 require([
   './filter/filter',
   './filter/filter-type',
-  './picture',
+  './picture/getPictureElement',
   './load',
   './utilities',
   './gallery',
+  './picture/picture',
   './resizer',
   './upload'
-], function(filter, FilterType, getPictureElement, load, utilities, gallery) {
+], function(filter, FilterType, getPictureElement, load, utilities, gallery, Picture) {
   // Прячет блок с фильтрами
   var filtersContainer = document.querySelector('.filters');
   filtersContainer.classList.add('hidden');
   var picturesContainer = document.querySelector('.pictures');
   /* @constant {String} */
-  var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
+  var PICTURES_DATA_URL = 'https://o0.github.io/assets/json/pictures.json';
 
   /** @type {Array.<Object>} */
   var pictures = [];
@@ -44,19 +45,28 @@ require([
 
   /** @constant {number} */
   var SCROLL_TIMEOUT = 100;
+
+  /** Массив отрисованных объектов фотографий
+   * @type {Array.<Picture>} */
+  var renderedPictures = [];
   /** @param {Array.<Object>} pics
    * @param {number} page
    * @param {boolean=} replace
    * */
   var renderPictures = function(pics, page, replace) {
     if (replace) {
-      picturesContainer.innerHTML = '';
+      //picturesContainer.innerHTML = '';
+      renderedPictures.forEach(function(picture) {
+        picture.remove();
+      });
+      renderedPictures = [];
     }
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
     var pictureIndex = from;
     pics.slice(from, to).forEach(function(picture) {
-      getPictureElement(picture, picturesContainer, pictureIndex++);
+      //getPictureElement(picture, picturesContainer, pictureIndex++);
+      renderedPictures.push(new Picture(picture, picturesContainer, pictureIndex++));
     });
   };
   /** @param {FilterType} filterType */
