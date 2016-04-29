@@ -13,14 +13,13 @@
 require([
   './filter/filter',
   './filter/filter-type',
-  './picture/getPictureElement',
   './load',
   './utilities',
   './gallery',
   './picture/picture',
   './resizer',
   './upload'
-], function(filter, FilterType, getPictureElement, load, utilities, gallery, Picture) {
+], function(filter, FilterType, load, utilities, gallery, Picture) {
   // Прячет блок с фильтрами
   var filtersContainer = document.querySelector('.filters');
   filtersContainer.classList.add('hidden');
