@@ -34,8 +34,8 @@ require([
   /** @type {number} */
   var pageNumber = 0;
 
-  /** @constant {Filter} */
-  var DEFAULT_FILTER = FilterType.POPULAR;
+  /** @type {string} */
+  var lastFilter = localStorage.getItem('lastFilter');
 
   /** @constant {number} */
   var SCROLL_TIMEOUT = 100;
@@ -66,7 +66,6 @@ require([
     filteredPictures = filter(pictures, filterType);
     pageNumber = 0;
     renderPictures(filteredPictures, pageNumber, true);
-   // filterType = localStorage.getItem('lastFilter');
     var activeFilter = filtersContainer.querySelector('input[type=radio]:checked');
     if (activeFilter) {
       activeFilter.removeAttribute('checked');
@@ -75,7 +74,7 @@ require([
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
-  //  localStorage.setItem('lastFilter', activeFilter.value);
+    localStorage.setItem('lastFilter', activeFilter.value);
   };
 
   var realiseFilters = function() {
@@ -112,7 +111,7 @@ require([
   load(PICTURES_DATA_URL, function(loadedPictures) {
     pictures = loadedPictures;
     realiseFilters();
-    realiseFilter(DEFAULT_FILTER);
+    realiseFilter(lastFilter);
     realiseScroll();
   });
 
