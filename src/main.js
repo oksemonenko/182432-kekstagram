@@ -34,8 +34,10 @@ require([
   /** @type {number} */
   var pageNumber = 0;
 
+  /** @constant {Filter} */
+  var DEFAULT_FILTER = FilterType.POPULAR;
   /** @type {string} */
-  var lastFilter = localStorage.getItem('lastFilter');
+  var lastFilter = localStorage.getItem('lastFilter') || DEFAULT_FILTER;
 
   /** @constant {number} */
   var SCROLL_TIMEOUT = 100;
@@ -61,6 +63,7 @@ require([
       renderedPictures.push(new Picture(picture, picturesContainer, pictureIndex++));
     });
   };
+
   /** @param {FilterType} filterType */
   var realiseFilter = function(filterType) {
     filteredPictures = filter(pictures, filterType);
