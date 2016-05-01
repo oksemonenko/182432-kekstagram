@@ -1,15 +1,10 @@
-/**
- * @fileoverview Фотографии: загрузка, включение фильтрации и постраничная
- * отрисовка
- * @author Oksana Semonenko
- */
-
 'use strict';
 
 // require('./resizer');
 // require('./upload');
 // require('./pictures');
 
+//require('./picture/pictures');
 require([
   './filter/filter',
   './filter/filter-type',
@@ -25,7 +20,7 @@ require([
   filtersContainer.classList.add('hidden');
   var picturesContainer = document.querySelector('.pictures');
   /* @constant {String} */
-  var PICTURES_DATA_URL = 'https://o0.github.io/assets/json/pictures.json';
+  var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
 
   /** @type {Array.<Object>} */
   var pictures = [];
@@ -41,6 +36,8 @@ require([
 
   /** @constant {Filter} */
   var DEFAULT_FILTER = FilterType.POPULAR;
+  /** @type {string} */
+  var lastFilter = localStorage.getItem('lastFilter') || DEFAULT_FILTER;
 
   /** @constant {number} */
   var SCROLL_TIMEOUT = 100;
@@ -54,7 +51,6 @@ require([
    * */
   var renderPictures = function(pics, page, replace) {
     if (replace) {
-      //picturesContainer.innerHTML = '';
       renderedPictures.forEach(function(picture) {
         picture.remove();
       });
@@ -64,10 +60,10 @@ require([
     var to = from + PAGE_SIZE;
     var pictureIndex = from;
     pics.slice(from, to).forEach(function(picture) {
-      //getPictureElement(picture, picturesContainer, pictureIndex++);
       renderedPictures.push(new Picture(picture, picturesContainer, pictureIndex++));
     });
   };
+
   /** @param {FilterType} filterType */
   var realiseFilter = function(filterType) {
     filteredPictures = filter(pictures, filterType);
@@ -81,6 +77,7 @@ require([
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
+    localStorage.setItem('lastFilter', activeFilter.value);
   };
 
   var realiseFilters = function() {
@@ -117,7 +114,7 @@ require([
   load(PICTURES_DATA_URL, function(loadedPictures) {
     pictures = loadedPictures;
     realiseFilters();
-    realiseFilter(DEFAULT_FILTER);
+    realiseFilter(lastFilter);
     realiseScroll();
   });
 
