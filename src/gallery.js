@@ -102,31 +102,31 @@ define(function() {
   this.galleryPictures = [];
   /** @type {number} */
   this.pictureIndexToShow = 0;
-  // /** @type {string} */
- // this.pictureHashToShow = '';
+ // Регулярное выражение для проверки хэша
   var re = /#photo\/(\S+)/;
+  //Получение адреса картинки из массива данных
   this.pictureUrl = function(pictureIndex) {
     return that.galleryPictures[pictureIndex].url;
   };
-  //Обработчик события клика по фотографии, показывает следующую фотографию
+  //Обработчик события клика по фотографии,записывает в хэш адрес фотографии
   this.onPhotoClick = function(evt) {
     evt.preventDefault();
     that.pictureIndexToShow = (that.pictureIndexToShow + 1) % that.galleryPictures.length;
     location.hash = 'photo/' + that.pictureUrl(that.pictureIndexToShow);
   };
-  //Обработчик клавиатурных событий, вызывает закрытие галереи по нажатию Esc
+  //Обработчик клавиатурных событий, очищает хэш по нажатию Esc
   this.onDocumentKeyDown = function(evt) {
     evt.preventDefault();
     if (event.keyCode === 27) {
       location.hash = '';
     }
   };
-  //Обработчик события клика по закрывающей кнопке, вызывает закрытие галереи
+  //Обработчик события клика по закрывающей кнопке, очищает хэш
   this.onCloseButtonClick = function(evt) {
     evt.preventDefault();
     location.hash = '';
   };
-  //Обработчик события клика по оверлею вокруг фотографии, вызывает закрытие галереи
+  //Обработчик события клика по оверлею вокруг фотографии, очищает хэш
   this.onGalleryOverlayClick = function(evt) {
     if (evt.target !== galleryImage &&
       evt.target !== closeButton) {
@@ -162,18 +162,36 @@ define(function() {
     closeButton.removeEventListener('click', this.onCloseButtonClick);
     this.galleryContainer.removeEventListener('click', this.onGalleryOverlayClick);
   };
+
+  this.showPictureByIndex = function(pictureIndex) {
+    this.pictureIndexToShow = pictureIndex;
+    this.picture = this.galleryPictures[pictureIndex];
+    galleryImage.src = this.picture.url;
+    galleryImage.width = '642';
+    this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
+    this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
+  };
+
+  /**Функция получения индекса фотографии в массиве по ее url
+   * @param {string} pictureUrl
+   */
+  this.getPictureIndexByUrl = function(pictureUrl) {
+    for(var i = 0; i < this.galleryPictures.length; i++) {
+      var pictureFromArray = this.galleryPictures[i];
+      if (pictureFromArray.url === pictureUrl) {
+        return i;
+      }
+    }
+    //Показывает первую фотографию, если задан неверный url
+    return 0;
+  };
   //Функция показа фотографии по ее индексу в массиве
   this.showPicture = function(pictureIndexOrUrl) {
     if (typeof (pictureIndexOrUrl) === 'number') {
-      this.pictureIndexToShow = pictureIndexOrUrl;
-      this.picture = this.galleryPictures[pictureIndexOrUrl];
-      galleryImage.src = this.picture.url;
-      galleryImage.width = '642';
-      this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
-      this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
+      that.showPictureByIndex(pictureIndexOrUrl);
     } else if (typeof (pictureIndexOrUrl) === 'string') {
-      //this.pictureHashToShow = pictureHash;
-      galleryImage.src = pictureIndexOrUrl;
+      var index = that.getPictureIndexByUrl(pictureIndexOrUrl);
+      that.showPictureByIndex(index);
     }
   };
   //Функция, которая скрывает галерею
@@ -181,6 +199,7 @@ define(function() {
     this.galleryContainer.classList.add('invisible');
     this.removeEventListeners();
   };
+  //Функция показа галереи
   this.showGallery = function(pictureIndexOrUrl) {
     that.galleryContainer.classList.remove('invisible');
     that.addEventListeners();
@@ -194,7 +213,9 @@ define(function() {
     savePictures: function(pictures) {
       that.galleryPictures = pictures;
     },
+    //Обработчик изменения хэша
     restoreFromHash: that.restoreFromHash,
+    pictureUrl: that.pictureUrl,
     //Функция показа галереи
     showGallery: that.showGallery
   };
