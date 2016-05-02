@@ -78,6 +78,7 @@ require([
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
     localStorage.setItem('lastFilter', activeFilter.value);
+    gallery.restoreFromHash();
   };
 
   var realiseFilters = function() {

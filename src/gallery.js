@@ -194,6 +194,7 @@ define(function() {
     savePictures: function(pictures) {
       that.galleryPictures = pictures;
     },
+    restoreFromHash: that.restoreFromHash,
     //Функция показа галереи
     showGallery: that.showGallery
   };
