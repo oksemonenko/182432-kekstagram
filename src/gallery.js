@@ -111,8 +111,8 @@ define(function() {
   //Обработчик события клика по фотографии, показывает следующую фотографию
   this.onPhotoClick = function(evt) {
     evt.preventDefault();
-    location.hash = 'photo/' + that.pictureUrl(that.pictureIndexToShow);
     that.pictureIndexToShow = (that.pictureIndexToShow + 1) % that.galleryPictures.length;
+    location.hash = 'photo/' + that.pictureUrl(that.pictureIndexToShow);
   };
   //Обработчик клавиатурных событий, вызывает закрытие галереи по нажатию Esc
   this.onDocumentKeyDown = function(evt) {
@@ -139,8 +139,12 @@ define(function() {
     that.restoreFromHash();
   };
   this.restoreFromHash = function() {
-    var pictureUrl = location.hash.match(re)[1];
-    that.showGallery(pictureUrl);
+    if (location.hash === '') {
+      that.hideGallery();
+    } else if (location.hash.match(re)) {
+      var pictureUrl = location.hash.match(re)[1];
+      that.showGallery(pictureUrl);
+    }
   };
   //Добавляет объекту window обработчик события изменения хэша
   window.addEventListener('hashchange', this.onHashChange);
