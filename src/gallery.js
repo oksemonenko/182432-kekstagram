@@ -243,17 +243,17 @@ define(function() {
     this.galleryPictures = [];
     /** @type {number} */
     this.pictureIndexToShow = 0;
-    this.pictureUrl = this.pictureUrl.bind(this);
+    //this.pictureUrl = this.pictureUrl.bind(this);
+    this.onPhotoClick = this.onPhotoClick.bind(this);
     this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
     this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
     this.onGalleryOverlayClick = this.onGalleryOverlayClick.bind(this);
     this.onHashChange = this.onHashChange.bind(this);
     this.restoreFromHash = this.restoreFromHash.bind(this);
-    this.addEventListeners = this.addEventListeners.bind(this);
-    this.removeEventListeners = this.removeEventListeners.bind(this);
-    this.showGallery = this.showGallery.bind(this);
-    this.hideGallery = this.hideGallery.bind(this);
-    this.onPhotoClick = this.onPhotoClick.bind(this);
+    //this.addEventListeners = this.addEventListeners.bind(this);
+   // this.removeEventListeners = this.removeEventListeners.bind(this);
+   //  this.showGallery = this.showGallery.bind(this);
+   //  this.hideGallery = this.hideGallery.bind(this);
     //Добавляет объекту window обработчик события изменения хэша
     window.addEventListener('hashchange', this.onHashChange);
     //this.galleryImage.addEventListener('click', this.onPhotoClick);
