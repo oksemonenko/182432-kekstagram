@@ -40,7 +40,9 @@ require([
   /** Массив отрисованных объектов фотографий
    * @type {Array.<Picture>} */
   var renderedPictures = [];
-  /** @param {Array.<Object>} pics
+
+  /**Функция отрисовки фотографий
+   *  @param {Array.<Object>} pics
    * @param {number} page
    * @param {boolean=} replace
    * */
@@ -59,7 +61,8 @@ require([
     });
   };
 
-  /** @param {FilterType} filterType */
+  /**Функция фильтрации фотографий
+   *  @param {FilterType} filterType */
   var realiseFilter = function(filterType) {
     filteredPictures = filter(pictures, filterType);
     pageNumber = 0;
@@ -76,6 +79,8 @@ require([
     gallery.onHashChange();
   };
 
+  //Функция включения фильтрации: добавляет обработчики событий
+  //при клике на кнопки фильтров
   var realiseFilters = function() {
     filtersContainer.addEventListener('click', function(evt) {
       if (evt.target.classList.contains('filters-radio')) {
@@ -83,6 +88,8 @@ require([
       }
     });
   };
+
+  //Функция реализации скролла
   var realiseScroll = function() {
     var scrollTimeout;
     window.addEventListener('scroll', function() {
@@ -96,6 +103,7 @@ require([
       }, SCROLL_TIMEOUT);
     });
   };
+
   //Проверка того, все ли фотографии показаны при большом разрешении экрана
   function addPageUntilScreenFull() {
     var windowHeight = document.documentElement.clientHeight;
@@ -107,6 +115,7 @@ require([
     }
   }
 
+  //Загрузка фотографий, установка фильрации и скролла
   load(PICTURES_DATA_URL, function(loadedPictures) {
     pictures = loadedPictures;
     realiseFilters();
@@ -114,7 +123,6 @@ require([
     realiseScroll();
   });
 
-// Отображает блок с фильтрами
-
+  // Отображает блок с фильтрами
   filtersContainer.classList.remove('hidden');
 });

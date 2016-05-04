@@ -199,7 +199,6 @@
   inputY.addEventListener('input', updateResizer);
   inputSize.addEventListener('input', updateResizer);
 
-
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
@@ -242,8 +241,8 @@
     resizeForm.classList.remove('invisible');
   });
 
-  // // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
-  // // в том году, в котором будет запущен этот код
+  // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
+  // в том году, в котором будет запущен этот код
   function getBirthDate() {
     var dateObj = new Date(Date.now());
     var birthDate = new Date();
@@ -268,9 +267,8 @@
   var browserCookies = require('browser-cookies');
   var filterControlsForm = document.querySelector('.upload-filter-controls');
 
-  //
-  // //Читает из cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
-  // //Ищет кнопку с этим фильтром и добавляет ей атрибут checked.
+  //Читает из cookies последний выбранный фильтр: «Оригинал», «Хром» или «Сепия».
+  //Ищет кнопку с этим фильтром и добавляет ей атрибут checked.
   var setFilter = function() {
     var currentFilter = browserCookies.get('filter') || 'none';
     var currentInput = filterControlsForm.querySelector('input[type=radio][value=' + currentFilter + ']');

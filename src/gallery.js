@@ -1,5 +1,5 @@
 /**
- * @fileoverview Галерея
+ * @fileoverview Конструктор галереи
  * @author Oksana Semonenko
  */
 
@@ -58,6 +58,7 @@ define(function() {
     this.galleryContainer.classList.add('invisible');
     this.removeEventListeners();
   };
+  //Обработчик события изменения хэша
   Gallery.prototype.onHashChange = function() {
     // Регулярное выражение для проверки хэша
     var re = /#photo\/(\S+)/;
@@ -68,7 +69,6 @@ define(function() {
       this.showGallery(pictureUrl);
     }
   };
-
   //Добавляет обработчики событий
   Gallery.prototype.addEventListeners = function() {
     this.galleryImage.addEventListener('click', this.onPhotoClick);
@@ -83,7 +83,7 @@ define(function() {
     this.closeButton.removeEventListener('click', this.onCloseButtonClick);
     this.galleryContainer.removeEventListener('click', this.onGalleryOverlayClick);
   };
-
+  //Функция показа фотографии по ее индексу в массиве
   Gallery.prototype.showPictureByIndex = function(pictureIndex) {
     this.pictureIndexToShow = pictureIndex;
     this.picture = this.galleryPictures[pictureIndex];
@@ -92,7 +92,6 @@ define(function() {
     this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
     this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
   };
-
   /**Функция получения индекса фотографии в массиве по ее url
    * @param {string} pictureUrl
    */

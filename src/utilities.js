@@ -10,13 +10,14 @@ define(function() {
   var GAP = 100;
   /** @return {boolean} */
   return {
+    //Проверка того, достигнут ли низ страницы
     isBottomReached: function() {
       var bodyElement = document.body;
       var bodyPosition = bodyElement.getBoundingClientRect();
       var windowHeight = document.documentElement.clientHeight;
       return bodyPosition.bottom - windowHeight - GAP <= 0;
     },
-    /**
+    /**Проверка доступности следующей страницы
      * @param {number} listSize
      * @param {number} page
      * @param {number} pageSize
