@@ -116,9 +116,7 @@ define(function() {
       }
       return birthDate;
     },
-    /**
-     * Проверяет, являются ли значения, введенные в поля ввода, числами.
-     */
+    // Проверяет, являются ли значения, введенные в поля ввода, числами.
     checkCorrectNum: function(num) {
       return (isFinite(+num.value) && (num.value !== ''));
     }
