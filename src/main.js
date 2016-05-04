@@ -9,7 +9,7 @@ require([
   './picture/picture',
   './resizer',
   './upload'
-], function(filter, FilterType, load, utilities, Gallery, Picture) {
+], function(filter, FilterType, load, utilities, gallery, Picture) {
   // Прячет блок с фильтрами
   var filtersContainer = document.querySelector('.filters');
   filtersContainer.classList.add('hidden');
@@ -71,9 +71,9 @@ require([
     var filterToActivate = filtersContainer.querySelector('input[type=radio][value=' + filterType + ']');
     filterToActivate.setAttribute('checked', true);
     addPageUntilScreenFull();
-    Gallery.savePictures(filteredPictures);
+    gallery.savePictures(filteredPictures);
     localStorage.setItem('lastFilter', activeFilter.value);
-    Gallery.restoreFromHash();
+    gallery.restoreFromHash();
   };
 
   var realiseFilters = function() {
