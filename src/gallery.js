@@ -5,169 +5,90 @@
 
 'use strict';
 
-// define(function() {
-//   /** @constructor */
-//   var self = this;
-//   this.galleryContainer = document.querySelector('.gallery-overlay');
-//   var galleryImage = this.galleryContainer.querySelector('.gallery-overlay-image');
-//   var closeButton = this.galleryContainer.querySelector('.gallery-overlay-close');
-//
-//   /** @type {Array.<Object>} */
-//   this.galleryPictures = [];
-//   /** @type {number} */
-//   this.pictureIndexToShow = 0;
-//   //Обработчик события клика по фотографии, показывает следующую фотографию
-//   this.onPhotoClick = function(evt) {
-//     evt.preventDefault();
-//     if (self.pictureIndexToShow <= self.galleryPictures.length) {
-//       self.pictureIndexToShow++;
-//       self.showPicture(self.pictureIndexToShow);
-//     } else {
-//       self.pictureIndexToShow = 0;
-//     }
-//   };
-//   //Обработчик клавиатурных событий, вызывает закрытие галереи по нажатию Esc
-//   this.onDocumentKeyDown = function(evt) {
-//     evt.preventDefault();
-//     if (event.keyCode === 27) {
-//       self.hideGallery();
-//     }
-//   };
-//   //Обработчик события клика по закрывающей кнопке, вызывает закрытие галереи
-//   this.onCloseButtonClick = function(evt) {
-//     evt.preventDefault();
-//     self.hideGallery();
-//   };
-//   //Обработчик события клика по оверлею вокруг фотографии, вызывает закрытие галереи
-//   this.onGalleryOverlayClick = function(evt) {
-//     if (evt.target !== galleryImage &&
-//       evt.target !== closeButton) {
-//       evt.preventDefault();
-//       self.hideGallery();
-//     }
-//   };
-//   //Добавляет обработчики событий
-//   this.addEventListeners = function() {
-//     galleryImage.addEventListener('click', this.onPhotoClick);
-//     document.addEventListener('keydown', this.onDocumentKeyDown);
-//     closeButton.addEventListener('click', this.onCloseButtonClick);
-//     this.galleryContainer.addEventListener('click', this.onGalleryOverlayClick);
-//   };
-//   //Удаляет обработчики событий
-//   this.removeEventListeners = function() {
-//     galleryImage.removeEventListener('click', this.onPhotoClick);
-//     document.removeEventListener('keydown', this.onDocumentKeyDown);
-//     closeButton.removeEventListener('click', this.onCloseButtonClick);
-//     this.galleryContainer.removeEventListener('click', this.onGalleryOverlayClick);
-//   };
-//   //Функция показа фотографии по ее индексу в массиве
-//   this.showPicture = function(pictureIndex) {
-//     this.pictureIndexToShow = pictureIndex;
-//     this.picture = this.galleryPictures[pictureIndex];
-//     galleryImage.src = this.picture.url;
-//     galleryImage.width = '642';
-//     this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
-//     this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
-//   };
-//   //Функция, которая скрывает галерею
-//   this.hideGallery = function() {
-//     this.galleryContainer.classList.add('invisible');
-//     this.removeEventListeners();
-//   };
-//   /**
-//    * @param {Array.<pictures>} pictures
-//    */
-//   return {
-//     //Функция, принимающая на вход массив объектов, описывающих фотографии, и сохраняющая его
-//     savePictures: function(pictures) {
-//       self.galleryPictures = pictures;
-//     },
-//     //Функция показа галереи
-//     showGallery: function(pictureIndex) {
-//       self.galleryContainer.classList.remove('invisible');
-//       self.addEventListeners();
-//       self.showPicture(pictureIndex);
-//     }
-//   };
-// });
-
 define(function() {
   /** @constructor */
-  var that = this;
-  this.galleryContainer = document.querySelector('.gallery-overlay');
-  var galleryImage = this.galleryContainer.querySelector('.gallery-overlay-image');
-  var closeButton = this.galleryContainer.querySelector('.gallery-overlay-close');
-
-  /** @type {Array.<Object>} */
-  this.galleryPictures = [];
-  /** @type {number} */
-  this.pictureIndexToShow = 0;
- // Регулярное выражение для проверки хэша
-  var re = /#photo\/(\S+)/;
+  var Gallery = function() {
+    this.galleryContainer = document.querySelector('.gallery-overlay');
+    this.galleryImage = this.galleryContainer.querySelector('.gallery-overlay-image');
+    this.closeButton = this.galleryContainer.querySelector('.gallery-overlay-close');
+    /** @type {Array.<Object>} */
+    this.galleryPictures = [];
+    /** @type {number} */
+    this.pictureIndexToShow = 0;
+    this.onPhotoClick = this.onPhotoClick.bind(this);
+    this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
+    this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
+    this.onGalleryOverlayClick = this.onGalleryOverlayClick.bind(this);
+    this.onHashChange = this.onHashChange.bind(this);
+    //Добавляет объекту window обработчик события изменения хэша
+    window.addEventListener('hashchange', this.onHashChange);
+  };
   //Получение адреса картинки из массива данных
-  this.pictureUrl = function(pictureIndex) {
-    return that.galleryPictures[pictureIndex].url;
+  Gallery.prototype.pictureUrl = function(pictureIndex) {
+    return this.galleryPictures[pictureIndex].url;
   };
   //Обработчик события клика по фотографии,записывает в хэш адрес фотографии
-  this.onPhotoClick = function(evt) {
+  Gallery.prototype.onPhotoClick = function(evt) {
     evt.preventDefault();
-    that.pictureIndexToShow = (that.pictureIndexToShow + 1) % that.galleryPictures.length;
-    location.hash = 'photo/' + that.pictureUrl(that.pictureIndexToShow);
+    this.pictureIndexToShow = (this.pictureIndexToShow + 1) % this.galleryPictures.length;
+    location.hash = 'photo/' + this.pictureUrl(this.pictureIndexToShow);
   };
   //Обработчик клавиатурных событий, очищает хэш по нажатию Esc
-  this.onDocumentKeyDown = function(evt) {
+  Gallery.prototype.onDocumentKeyDown = function(evt) {
     evt.preventDefault();
     if (event.keyCode === 27) {
       location.hash = '';
     }
   };
   //Обработчик события клика по закрывающей кнопке, очищает хэш
-  this.onCloseButtonClick = function(evt) {
+  Gallery.prototype.onCloseButtonClick = function(evt) {
     evt.preventDefault();
     location.hash = '';
   };
   //Обработчик события клика по оверлею вокруг фотографии, очищает хэш
-  this.onGalleryOverlayClick = function(evt) {
-    if (evt.target !== galleryImage &&
-      evt.target !== closeButton) {
+  Gallery.prototype.onGalleryOverlayClick = function(evt) {
+    if (evt.target !== this.galleryImage &&
+      evt.target !== this.closeButton) {
       evt.preventDefault();
       location.hash = '';
     }
   };
-  //Обработчик изменения хэша
-  this.onHashChange = function() {
-    that.restoreFromHash();
+  //Функция, которая скрывает галерею
+  Gallery.prototype.hideGallery = function() {
+    this.galleryContainer.classList.add('invisible');
+    this.removeEventListeners();
   };
-  this.restoreFromHash = function() {
+  Gallery.prototype.onHashChange = function() {
+    // Регулярное выражение для проверки хэша
+    var re = /#photo\/(\S+)/;
     if (location.hash === '') {
-      that.hideGallery();
+      this.hideGallery();
     } else if (location.hash.match(re)) {
       var pictureUrl = location.hash.match(re)[1];
-      that.showGallery(pictureUrl);
+      this.showGallery(pictureUrl);
     }
   };
-  //Добавляет объекту window обработчик события изменения хэша
-  window.addEventListener('hashchange', this.onHashChange);
+
   //Добавляет обработчики событий
-  this.addEventListeners = function() {
-    galleryImage.addEventListener('click', this.onPhotoClick);
+  Gallery.prototype.addEventListeners = function() {
+    this.galleryImage.addEventListener('click', this.onPhotoClick);
     document.addEventListener('keydown', this.onDocumentKeyDown);
-    closeButton.addEventListener('click', this.onCloseButtonClick);
+    this.closeButton.addEventListener('click', this.onCloseButtonClick);
     this.galleryContainer.addEventListener('click', this.onGalleryOverlayClick);
   };
   //Удаляет обработчики событий
-  this.removeEventListeners = function() {
-    galleryImage.removeEventListener('click', this.onPhotoClick);
+  Gallery.prototype.removeEventListeners = function() {
+    this.galleryImage.removeEventListener('click', this.onPhotoClick);
     document.removeEventListener('keydown', this.onDocumentKeyDown);
-    closeButton.removeEventListener('click', this.onCloseButtonClick);
+    this.closeButton.removeEventListener('click', this.onCloseButtonClick);
     this.galleryContainer.removeEventListener('click', this.onGalleryOverlayClick);
   };
 
-  this.showPictureByIndex = function(pictureIndex) {
+  Gallery.prototype.showPictureByIndex = function(pictureIndex) {
     this.pictureIndexToShow = pictureIndex;
     this.picture = this.galleryPictures[pictureIndex];
-    galleryImage.src = this.picture.url;
-    galleryImage.width = '642';
+    this.galleryImage.src = this.picture.url;
+    this.galleryImage.width = '642';
     this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
     this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
   };
@@ -175,7 +96,7 @@ define(function() {
   /**Функция получения индекса фотографии в массиве по ее url
    * @param {string} pictureUrl
    */
-  this.getPictureIndexByUrl = function(pictureUrl) {
+  Gallery.prototype.getPictureIndexByUrl = function(pictureUrl) {
     for(var i = 0; i < this.galleryPictures.length; i++) {
       var pictureFromArray = this.galleryPictures[i];
       if (pictureFromArray.url === pictureUrl) {
@@ -186,37 +107,26 @@ define(function() {
     return 0;
   };
   //Функция показа фотографии по ее индексу в массиве
-  this.showPicture = function(pictureIndexOrUrl) {
+  Gallery.prototype.showPicture = function(pictureIndexOrUrl) {
     if (typeof (pictureIndexOrUrl) === 'number') {
-      that.showPictureByIndex(pictureIndexOrUrl);
+      this.showPictureByIndex(pictureIndexOrUrl);
     } else if (typeof (pictureIndexOrUrl) === 'string') {
-      var index = that.getPictureIndexByUrl(pictureIndexOrUrl);
-      that.showPictureByIndex(index);
+      var index = this.getPictureIndexByUrl(pictureIndexOrUrl);
+      this.showPictureByIndex(index);
     }
   };
-  //Функция, которая скрывает галерею
-  this.hideGallery = function() {
-    this.galleryContainer.classList.add('invisible');
-    this.removeEventListeners();
-  };
   //Функция показа галереи
-  this.showGallery = function(pictureIndexOrUrl) {
-    that.galleryContainer.classList.remove('invisible');
-    that.addEventListeners();
-    that.showPicture(pictureIndexOrUrl);
+  Gallery.prototype.showGallery = function(pictureIndexOrUrl) {
+    this.galleryContainer.classList.remove('invisible');
+    this.addEventListeners();
+    this.showPicture(pictureIndexOrUrl);
   };
-  /**
+  /*Функция, принимающая на вход массив объектов, описывающих фотографии, и сохраняющая его
    * @param {Array.<pictures>} pictures
    */
-  return {
-    //Функция, принимающая на вход массив объектов, описывающих фотографии, и сохраняющая его
-    savePictures: function(pictures) {
-      that.galleryPictures = pictures;
-    },
-    //Обработчик изменения хэша
-    restoreFromHash: that.restoreFromHash,
-    pictureUrl: that.pictureUrl,
-    //Функция показа галереи
-    showGallery: that.showGallery
+  Gallery.prototype.savePictures = function(pictures) {
+    this.galleryPictures = pictures;
   };
+  return new Gallery();
 });
+

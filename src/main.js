@@ -1,10 +1,5 @@
 'use strict';
 
-// require('./resizer');
-// require('./upload');
-// require('./pictures');
-
-//require('./picture/pictures');
 require([
   './filter/filter',
   './filter/filter-type',
@@ -78,7 +73,7 @@ require([
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
     localStorage.setItem('lastFilter', activeFilter.value);
-    gallery.restoreFromHash();
+    gallery.onHashChange();
   };
 
   var realiseFilters = function() {
