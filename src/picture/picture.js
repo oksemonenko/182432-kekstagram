@@ -15,11 +15,12 @@ define([
    * @param {Number} pictureIndex
    * @constructor
    */
-  return function(data, container, pictureIndex) {
+  return function(data, container, pictureIndexToShow) {
     this.data = data;
-    this.element = getPictureElement(this.data, container, pictureIndex);
+    this.element = getPictureElement(this.data, container, pictureIndexToShow);
     this.onPhotoClick = function() {
-      gallery.showGallery(pictureIndex);
+      location.hash = 'photo/' + gallery.pictureUrl(pictureIndexToShow);
+
     };
     this.remove = function() {
       this.element.removeEventListener('click', this.onPhotoClick);
