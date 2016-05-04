@@ -90,13 +90,14 @@
 
       // Толщина линии.
       this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
+      //Закомментировано, т.к. отрисовка рамки переопределена ниже.
+      // // Цвет обводки.
+      // this._ctx.strokeStyle = '#ffe753';
+      // // Размер штрихов. Первый элемент массива задает длину штриха, второй
+      // // расстояние между соседними штрихами.
+      // this._ctx.setLineDash([15, 10]);
+      // // Смещение первого штриха от начала линии.
+      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       // Подробней см. строку 132.
@@ -114,34 +115,34 @@
 
       //Отрисовка вокруг жёлтой рамки чёрного слоя с прозрачностью 80%
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-      var w = this._container.width;
-      var h = this._container.height;
-      var s = this._resizeConstraint.side;
-      var l = this._ctx.lineWidth;
+      var contWidth = this._container.width;
+      var contHeight = this._container.height;
+      var side = this._resizeConstraint.side;
+      var line = this._ctx.lineWidth;
 
       this._ctx.fillRect(
-        -w / 2,
-        -h / 2,
-        w,
-        h / 2 - s / 2 - l
+        -contWidth / 2,
+        -contHeight / 2,
+        contWidth,
+        contHeight / 2 - side / 2 - line
       );
       this._ctx.fillRect(
-        -w / 2,
-        s / 2 + l,
-        w,
-        h / 2 - s / 2 - l
+        -contWidth / 2,
+        side / 2 + line,
+        contWidth,
+        contHeight / 2 - side / 2 - line
       );
       this._ctx.fillRect(
-        -w / 2 - l,
-        -s / 2 - l,
-        w / 2 - s / 2,
-        s + l * 2
+        -contWidth / 2 - line,
+        -side / 2 - line,
+        contWidth / 2 - side / 2,
+        side + line * 2
       );
       this._ctx.fillRect(
-        s / 2 + l,
-        -s / 2 - l,
-        w / 2 - s / 2,
-        s + l * 2
+        side / 2 + line,
+        -side / 2 - line,
+        contWidth / 2 - side / 2,
+        side + line * 2
       );
 
       //Выводит размеры кадрируемого изображения над прямоугольником
@@ -157,38 +158,41 @@
 
       // Дополнительное задание
       // Отрисовка рамки жёлтыми точками
-      // var i, j;
-      // var a = this._ctx;
-      // function drawRounds() {
-      //   a.fillStyle = '#ffe753';
-      //   a.beginPath();
-      //   a.arc(j, i, 3, 0, Math.PI * 2, true);
-      //   a.fill();
-      // }
-      // i = (-s / 2) - l / 2;
-      // for (j = (-s / 2) - l / 2; j < s / 2 + l / 2; j = j + 10) {
-      //   drawRounds();
-      // }
-      // i = s / 2 + l / 2;
-      // for (j = (-s / 2) - l / 2; j < s / 2 + l / 2; j = j + 10) {
-      //   drawRounds();
-      // }
-      // j = (-s / 2) - l / 2;
-      // for (i = (-s / 2) - l / 2; i < s / 2 + l / 2; i = i + 10) {
-      //   drawRounds();
-      // }
-      // j = s / 2 + l / 2;
-      // for (i = (-s / 2) - l / 2; i < s / 2 + l / 2; i = i + 10) {
-      //   drawRounds();
-      // }
+      var border = this._ctx;
+      function drawBorder() {
+        var i, j;
+        //Функция отрисовки точек-кружочков
+        function drawRounds() {
+          border.strokeStyle = 'transparent';
+          border.fillStyle = '#ffe753';
+          border.beginPath();
+          border.arc(j, i, 3, 0, Math.PI * 2, true);
+          border.fill();
+        }
+        i = (-side / 2) - line / 2;
+        for (j = (-side / 2) - line / 2; j < side / 2 + line / 2; j = j + 10) {
+          drawRounds();
+        }
+        i = side / 2 + line / 2;
+        for (j = (-side / 2) - line / 2; j < side / 2 + line / 2; j = j + 10) {
+          drawRounds();
+        }
+        j = (-side / 2) - line / 2;
+        for (i = (-side / 2) - line / 2; i < side / 2 + line / 2; i = i + 10) {
+          drawRounds();
+        }
+        j = side / 2 + line / 2;
+        for (i = (-side / 2) - line / 2; i < side / 2 + line / 2; i = i + 10) {
+          drawRounds();
+        }
+      }
+      drawBorder();
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          // this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          // this._resizeConstraint.side - this._ctx.lineWidth / 2);
           this._resizeConstraint.side + this._ctx.lineWidth,
           this._resizeConstraint.side + this._ctx.lineWidth);
 
