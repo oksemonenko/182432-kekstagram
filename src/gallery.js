@@ -15,7 +15,6 @@ define(function() {
     this.galleryPictures = [];
     /** @type {number} */
     this.pictureIndexToShow = 0;
-    //this.pictureUrl = this.pictureUrl.bind(this);
     this.onPhotoClick = this.onPhotoClick.bind(this);
     this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
     this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
@@ -24,7 +23,6 @@ define(function() {
     this.restoreFromHash = this.restoreFromHash.bind(this);
     //Добавляет объекту window обработчик события изменения хэша
     window.addEventListener('hashchange', this.onHashChange);
-    //this.galleryImage.addEventListener('click', this.onPhotoClick);
   };
   //Получение адреса картинки из массива данных
   Gallery.prototype.pictureUrl = function(pictureIndex) {
