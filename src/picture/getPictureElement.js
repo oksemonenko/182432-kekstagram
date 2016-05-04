@@ -49,7 +49,6 @@ define([
     }, IMAGE_LOAD_TIMEOUT);
     element.addEventListener('click', function(evt) {
       evt.preventDefault();
-      //gallery.showGallery(pictureIndex);
       location.hash = 'photo/' + gallery.pictureUrl(pictureIndex);
     });
     return element;

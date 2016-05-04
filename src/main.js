@@ -1,10 +1,5 @@
 'use strict';
 
-// require('./resizer');
-// require('./upload');
-// require('./pictures');
-
-//require('./picture/pictures');
 require([
   './filter/filter',
   './filter/filter-type',
