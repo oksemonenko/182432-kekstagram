@@ -73,7 +73,7 @@ require([
     addPageUntilScreenFull();
     gallery.savePictures(filteredPictures);
     localStorage.setItem('lastFilter', activeFilter.value);
-    gallery.restoreFromHash();
+    gallery.onHashChange();
   };
 
   var realiseFilters = function() {

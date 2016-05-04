@@ -20,7 +20,6 @@ define(function() {
     this.onCloseButtonClick = this.onCloseButtonClick.bind(this);
     this.onGalleryOverlayClick = this.onGalleryOverlayClick.bind(this);
     this.onHashChange = this.onHashChange.bind(this);
-    this.restoreFromHash = this.restoreFromHash.bind(this);
     //Добавляет объекту window обработчик события изменения хэша
     window.addEventListener('hashchange', this.onHashChange);
   };
@@ -59,7 +58,7 @@ define(function() {
     this.galleryContainer.classList.add('invisible');
     this.removeEventListeners();
   };
-  Gallery.prototype.restoreFromHash = function() {
+  Gallery.prototype.onHashChange = function() {
     // Регулярное выражение для проверки хэша
     var re = /#photo\/(\S+)/;
     if (location.hash === '') {
@@ -68,10 +67,6 @@ define(function() {
       var pictureUrl = location.hash.match(re)[1];
       this.showGallery(pictureUrl);
     }
-  };
-  //Обработчик изменения хэша
-  Gallery.prototype.onHashChange = function() {
-    this.restoreFromHash();
   };
 
   //Добавляет обработчики событий
