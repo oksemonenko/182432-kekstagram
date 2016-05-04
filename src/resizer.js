@@ -1,6 +1,8 @@
 'use strict';
 
-(function() {
+define([
+  './utilities'
+], function(utilities) {
   /**
    * @constructor
    * @param {string} image
@@ -90,14 +92,6 @@
 
       // Толщина линии.
       this._ctx.lineWidth = 6;
-      //Закомментировано, т.к. отрисовка рамки переопределена ниже.
-      // // Цвет обводки.
-      // this._ctx.strokeStyle = '#ffe753';
-      // // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // // расстояние между соседними штрихами.
-      // this._ctx.setLineDash([15, 10]);
-      // // Смещение первого штриха от начала линии.
-      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       // Подробней см. строку 132.
@@ -114,79 +108,32 @@
       this._ctx.drawImage(this._image, displX, displY);
 
       //Отрисовка вокруг жёлтой рамки чёрного слоя с прозрачностью 80%
-      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-      var contWidth = this._container.width;
-      var contHeight = this._container.height;
-      var side = this._resizeConstraint.side;
-      var line = this._ctx.lineWidth;
-
-      this._ctx.fillRect(
-        -contWidth / 2,
-        -contHeight / 2,
-        contWidth,
-        contHeight / 2 - side / 2 - line
-      );
-      this._ctx.fillRect(
-        -contWidth / 2,
-        side / 2 + line,
-        contWidth,
-        contHeight / 2 - side / 2 - line
-      );
-      this._ctx.fillRect(
-        -contWidth / 2 - line,
-        -side / 2 - line,
-        contWidth / 2 - side / 2,
-        side + line * 2
-      );
-      this._ctx.fillRect(
-        side / 2 + line,
-        -side / 2 - line,
-        contWidth / 2 - side / 2,
-        side + line * 2
+      utilities.drawOverlay(
+        this._ctx,
+        this._container.width,
+        this._container.height,
+        this._resizeConstraint.side,
+        this._ctx.lineWidth
       );
 
       //Выводит размеры кадрируемого изображения над прямоугольником
-      this._ctx.fillStyle = 'white';
-      this._ctx.font = '12pt Arial';
-      this._ctx.textAlign = 'center';
-      this._ctx.textBaseline = 'bottom';
-      this._ctx.fillText(
-        this._image.naturalWidth + ' x ' + this._image.naturalHeight,
-        0,
-        -this._resizeConstraint.side / 2 - this._ctx.lineWidth * 2
+      utilities.setImageSize(
+        this._ctx,
+        this._image,
+        this._resizeConstraint.side,
+        this._ctx.lineWidth
       );
 
       // Дополнительное задание
       // Отрисовка рамки жёлтыми точками
-      var border = this._ctx;
-      function drawBorder() {
-        var i, j;
-        //Функция отрисовки точек-кружочков
-        function drawRounds() {
-          border.strokeStyle = 'transparent';
-          border.fillStyle = '#ffe753';
-          border.beginPath();
-          border.arc(j, i, 3, 0, Math.PI * 2, true);
-          border.fill();
-        }
-        i = (-side / 2) - line / 2;
-        for (j = (-side / 2) - line / 2; j < side / 2 + line / 2; j = j + 10) {
-          drawRounds();
-        }
-        i = side / 2 + line / 2;
-        for (j = (-side / 2) - line / 2; j < side / 2 + line / 2; j = j + 10) {
-          drawRounds();
-        }
-        j = (-side / 2) - line / 2;
-        for (i = (-side / 2) - line / 2; i < side / 2 + line / 2; i = i + 10) {
-          drawRounds();
-        }
-        j = side / 2 + line / 2;
-        for (i = (-side / 2) - line / 2; i < side / 2 + line / 2; i = i + 10) {
-          drawRounds();
-        }
-      }
-      drawBorder();
+      var i, j;
+      utilities.drawBorder(
+        this._ctx,
+        i,
+        j,
+        this._resizeConstraint.side,
+        this._ctx.lineWidth
+      );
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
@@ -392,4 +339,4 @@
   };
 
   window.Resizer = Resizer;
-})();
+});
