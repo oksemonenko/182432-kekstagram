@@ -7,7 +7,9 @@
 
 'use strict';
 
-(function() {
+define([
+  './utilities'
+], function(utilities) {
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -241,29 +243,6 @@
     resizeForm.classList.remove('invisible');
   });
 
-  // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
-  // в том году, в котором будет запущен этот код
-  function getBirthDate() {
-    var dateObj = new Date(Date.now());
-    var birthDate = new Date();
-    var year1 = dateObj.getFullYear();
-    var month1 = dateObj.getMonth();
-    var day1 = dateObj.getDate();
-    birthDate.setMonth(2);
-    birthDate.setDate(3);
-    var month2 = 2;
-    var day2 = 3;
-
-    if (month1 < month2) {
-      birthDate.setFullYear(year1 - 1);
-    } else if (month1 === month2) {
-      if (day1 < day2) {
-        birthDate.setFullYear(year1 - 1);
-      }
-    }
-    return birthDate;
-  }
-
   var browserCookies = require('browser-cookies');
   var filterControlsForm = document.querySelector('.upload-filter-controls');
 
@@ -284,7 +263,7 @@
   filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
     var filter = filterControlsForm.querySelector('input[name=upload-filter]:checked');
-    var date = new Date(Date.now() + (Date.now() - getBirthDate()));
+    var date = new Date(Date.now() + (Date.now() - utilities.getBirthDate()));
     var expiresDate = date.toUTCString();
     browserCookies.set('filter', filter.value, {
       expires: expiresDate
@@ -332,12 +311,7 @@
    * Дисейблит кнопку
    */
   button.setAttribute('disabled', true);
-  /**
-   * Проверяет, являются ли значения, введенные в поля ввода, числами.
-   */
-  var checkCorrectNum = function(num) {
-    return (isFinite(+num.value) && (num.value !== ''));
-  };
+
   /**
    * Проверяет значения, введенные в поля ввода, и если они не соответствуют размеру картинки,
    * дисейблит кнопку.
@@ -346,7 +320,7 @@
    * @param {HTMLInputElement} side1
    */
   var resizeControls = function(left1, top1, side1) {
-    if (checkCorrectNum(left1) && checkCorrectNum(top1) && checkCorrectNum(side1)) {
+    if (utilities.checkCorrectNum(left1) && utilities.checkCorrectNum(top1) && utilities.checkCorrectNum(side1)) {
       var leftValue = Number(left1.value);
       var topValue = Number(top1.value);
       var sideValue = Number(side1.value);
@@ -370,4 +344,4 @@
   formInputs.forEach(function(formInput) {
     formInput.addEventListener('input', resizeControlsEvt);
   });
-})();
+});

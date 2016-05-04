@@ -93,6 +93,34 @@ define(function() {
         0,
         -side / 2 - line * 2
       );
+    },
+    // Создает объект даты таким образом, чтобы он соответствовал моему дню рождения
+    // в том году, в котором будет запущен этот код
+    getBirthDate: function() {
+      var dateObj = new Date(Date.now());
+      var birthDate = new Date();
+      var year1 = dateObj.getFullYear();
+      var month1 = dateObj.getMonth();
+      var day1 = dateObj.getDate();
+      birthDate.setMonth(2);
+      birthDate.setDate(3);
+      var month2 = 2;
+      var day2 = 3;
+
+      if (month1 < month2) {
+        birthDate.setFullYear(year1 - 1);
+      } else if (month1 === month2) {
+        if (day1 < day2) {
+          birthDate.setFullYear(year1 - 1);
+        }
+      }
+      return birthDate;
+    },
+    /**
+     * Проверяет, являются ли значения, введенные в поля ввода, числами.
+     */
+    checkCorrectNum: function(num) {
+      return (isFinite(+num.value) && (num.value !== ''));
     }
   };
 });
