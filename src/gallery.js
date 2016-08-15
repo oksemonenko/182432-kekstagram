@@ -89,6 +89,7 @@ define(function() {
     this.picture = this.galleryPictures[pictureIndex];
     this.galleryImage.src = this.picture.url;
     this.galleryImage.width = '642';
+    this.galleryImage.height = '642';
     this.galleryContainer.querySelector('.comments-count').textContent = this.picture.comments;
     this.galleryContainer.querySelector('.likes-count').textContent = this.picture.likes;
   };
