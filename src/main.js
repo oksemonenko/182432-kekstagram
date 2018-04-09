@@ -15,7 +15,7 @@ require([
   filtersContainer.classList.add('hidden');
   var picturesContainer = document.querySelector('.pictures');
   /* @constant {String} */
-  var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
+  var PICTURES_DATA_URL = 'json/pictures.json';
 
   /** @type {Array.<Object>} */
   var pictures = [];
