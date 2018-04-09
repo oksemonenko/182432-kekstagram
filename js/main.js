@@ -112,7 +112,7 @@
 	  filtersContainer.classList.add('hidden');
 	  var picturesContainer = document.querySelector('.pictures');
 	  /* @constant {String} */
-	  var PICTURES_DATA_URL = '//o0.github.io/assets/json/pictures.json';
+	  var PICTURES_DATA_URL = '//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js';
 
 	  /** @type {Array.<Object>} */
 	  var pictures = [];
